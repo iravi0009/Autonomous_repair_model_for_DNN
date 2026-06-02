@@ -50,3 +50,28 @@ class MetricsEngine:
             "memory_delta_mb": max(0.0, end_mem - start_mem)
         }
         return metrics
+
+class EfficiencyProfiler:
+    @staticmethod
+    def calculate_parameter_efficiency(model):
+        """Measures parameter reduction provided by targeted LoRA allocation."""
+        total_params = sum(p.numel() for p in model.parameters())
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+        reduction_percentage = (1.0 - (trainable_params / total_params)) * 100
+        return {
+            "total_parameters": total_params,
+            "trainable_parameters": trainable_params,
+            "parameter_reduction_rate": reduction_percentage
+        }
+
+    @staticmethod
+    def calculate_repair_speedup(time_full_retrain, time_healer_patch):
+        """Computes the operational speedup factor achieved by the framework."""
+        speedup_factor = time_full_retrain / (time_healer_patch + 1e-8)
+        time_saved_pct = ((time_full_retrain - time_healer_patch) / time_full_retrain) * 100
+
+        return {
+            "speedup_multiplier": speedup_factor,
+            "compute_time_saved_percentage": time_saved_pct
+        }
