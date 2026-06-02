@@ -1,0 +1,11 @@
+torch
+torchao
+peft
+safetensors
+numpy
+matplotlib
+scikit-learn
+scipy
+psutil
+
+requirements.txt contains all Python dependencies required to run the Autonomous LoRA Self-Healing Framework, including PyTorch, PEFT/LoRA components, evaluation libraries, and performance profiling tools.
